@@ -42,6 +42,8 @@
 #include "InputReader.h"
 
 #include <cutils/log.h>
+//codewalker
+#include <cutils/properties.h>
 #include <input/Keyboard.h>
 #include <input/VirtualKeyMap.h>
 
@@ -1143,7 +1145,14 @@ void CursorButtonAccumulator::process(const RawEvent* rawEvent) {
             mBtnLeft = rawEvent->value;
             break;
         case BTN_RIGHT:
+			{
+			char value[PROPERTY_VALUE_MAX];
+			property_get("mouse.right.click", value, NULL);
+			if (strcmp(value, "back") == 0)
+            	mBtnBack = rawEvent->value;
+			else
             mBtnRight = rawEvent->value;
+			}
             break;
         case BTN_MIDDLE:
             mBtnMiddle = rawEvent->value;
