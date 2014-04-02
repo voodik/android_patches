@@ -298,7 +298,7 @@ public class KeyButtonView extends ImageView {
                 //Log.d("KeyButtonView", "press");
                 mDownTime = SystemClock.uptimeMillis();
                 setPressed(true);
-                if (mCode != 0) {
+                if (mCode != 0 && mCode != KeyEvent.KEYCODE_POWER) {
                     sendEvent(KeyEvent.ACTION_DOWN, 0, mDownTime);
                 } else {
                     // Provide the same haptic feedback that the system offers for virtual keys.
@@ -306,7 +306,12 @@ public class KeyButtonView extends ImageView {
                 }
                 if (supportsLongPress()) {
                     removeCallbacks(mCheckLongPress);
-                    postDelayed(mCheckLongPress, ViewConfiguration.getLongPressTimeout());
+                    	if (mCode == KeyEvent.KEYCODE_POWER) {
+                    	postDelayed(mCheckLongPress, 0);
+                    	}
+                    	else {
+                    	postDelayed(mCheckLongPress, ViewConfiguration.getLongPressTimeout());
+                    	}
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -329,7 +334,7 @@ public class KeyButtonView extends ImageView {
             case MotionEvent.ACTION_UP:
                 final boolean doIt = isPressed();
                 setPressed(false);
-                if (mCode != 0) {
+                if (mCode != 0 && mCode != KeyEvent.KEYCODE_POWER) {
                     if (doIt) {
                         sendEvent(KeyEvent.ACTION_UP, 0);
                         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
