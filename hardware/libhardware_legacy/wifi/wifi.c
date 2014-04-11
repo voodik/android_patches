@@ -48,6 +48,7 @@
 #include <sys/_system_properties.h>
 #endif
 
+#define WIFIUSB_NODE	"/sys/bus/usb/devices/1-3."
 static struct wpa_ctrl *ctrl_conn;
 static struct wpa_ctrl *monitor_conn;
 
@@ -115,9 +116,9 @@ static const char EXT_MODULE_PATH[] = WIFI_EXT_MODULE_PATH;
 
 static const char IFACE_DIR[]           = "/data/system/wpa_supplicant";
 #ifdef WIFI_DRIVER_MODULE_PATH
-static const char DRIVER_MODULE_NAME[]  = WIFI_DRIVER_MODULE_NAME;
-static const char DRIVER_MODULE_TAG[]   = WIFI_DRIVER_MODULE_NAME " ";
-static const char DRIVER_MODULE_PATH[]  = WIFI_DRIVER_MODULE_PATH;
+char DRIVER_MODULE_NAME[16]  = WIFI_DRIVER_MODULE_NAME;
+char DRIVER_MODULE_TAG[16]   = WIFI_DRIVER_MODULE_NAME " ";
+char DRIVER_MODULE_PATH[64]  = WIFI_DRIVER_MODULE_PATH;
 static const char DRIVER_MODULE_ARG[]   = WIFI_DRIVER_MODULE_ARG;
 static const char DRIVER_MODULE_AP_ARG[] = WIFI_DRIVER_MODULE_AP_ARG;
 #endif
@@ -143,6 +144,7 @@ static unsigned char dummy_key[21] = { 0x02, 0x11, 0xbe, 0x33, 0x43, 0x35,
                                        0x1c, 0xd3, 0xee, 0xff, 0xf1, 0xe2,
                                        0xf3, 0xf4, 0xf5 };
 
+int wifi_set_module_status	(char *ctl_fp, unsigned char status);
 /* Is either SUPPLICANT_NAME or P2P_SUPPLICANT_NAME */
 static char supplicant_name[PROPERTY_VALUE_MAX];
 /* Is either SUPP_PROP_NAME or P2P_PROP_NAME */
@@ -278,6 +280,58 @@ int wifi_load_driver()
     char driver_status[PROPERTY_VALUE_MAX];
     int count = 100; /* wait at most 20 seconds for completion */
     char module_arg2[256];
+
+#ifdef WIFI_DRIVER_MODULE_NAME2
+	DIR *dir = opendir("/sys/bus/usb/devices/");
+	struct dirent *dent;
+	if (dir != NULL) {
+		while ((dent = readdir(dir)) != NULL) {
+			char node[50] = {'\0',};
+			sprintf(node, "/sys/bus/usb/devices/%s/idVendor", dent->d_name);
+			int vid_fd = open(node, O_RDONLY);
+			char buf[5];
+			if (vid_fd > 0) {
+				read(vid_fd, buf, 4);
+				ALOGE("node = %s, vid = %s", node, buf);
+				if (strcmp(buf, "0bda") == 0) {
+					sprintf(node, "/sys/bus/usb/devices/%s/idProduct", dent->d_name);
+					int pid_fd = open(node, O_RDONLY);
+					read(pid_fd, buf, 4);
+					ALOGE("node = %s, pid = %s", node, buf);
+					if (pid_fd > 0) {
+						if (strcmp(buf, "8176") == 0) {
+							ALOGE("rtl8192cu Wi-Fi Module 3");
+							//wifi module 3 rtl8192cu
+							strcpy(DRIVER_MODULE_NAME, WIFI_DRIVER_MODULE_NAME2);
+							strcpy(DRIVER_MODULE_TAG, WIFI_DRIVER_MODULE_NAME2 " ");
+							strcpy(DRIVER_MODULE_PATH, WIFI_DRIVER_MODULE_PATH2);
+							close(pid_fd);
+							close(vid_fd);
+							break;
+						} else if (strcmp(buf, "8172") == 0) {
+							ALOGE("rtl8191su Wi-Fi Module 2");
+							//wifi module 2 rtl8192cu
+							strcpy(DRIVER_MODULE_NAME, WIFI_DRIVER_MODULE_NAME);
+							strcpy(DRIVER_MODULE_TAG, WIFI_DRIVER_MODULE_NAME " ");
+							strcpy(DRIVER_MODULE_PATH, WIFI_DRIVER_MODULE_PATH);
+							close(pid_fd);
+							close(vid_fd);
+							break;
+
+						}
+						close(pid_fd);
+					}
+				}
+				close(vid_fd);
+			}
+		}
+	}
+	close(dir);
+
+	ALOGE("DRIVER_MODULE_NAME = %s", DRIVER_MODULE_NAME);
+	ALOGE("DRIVER_MODULE_PATH = %s", DRIVER_MODULE_PATH);
+#endif
+
 #ifdef SAMSUNG_WIFI
     char* type = get_samsung_wifi_type();
 
