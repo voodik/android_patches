@@ -1531,6 +1531,12 @@ public class InputManagerService extends IInputManager.Stub
     }
 
     // Native callback.
+	//codewalker
+    private PointerIcon getZoomIcon() {
+        return PointerIcon.getZoomIcon(mContext);
+    }
+
+    // Native callback.
     private String[] getKeyboardLayoutOverlay(String inputDeviceDescriptor) {
         if (!mSystemReady) {
             return null;
