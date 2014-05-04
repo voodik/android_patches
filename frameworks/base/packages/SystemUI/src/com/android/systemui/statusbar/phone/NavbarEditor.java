@@ -56,13 +56,13 @@ public class NavbarEditor implements View.OnTouchListener {
      * Holds reference to all assignable button ids
      */
     private static final int[] BUTTON_IDS =
-            { R.id.one, R.id.two, R.id.three, R.id.four, R.id.five, R.id.six };
+            { R.id.one, R.id.two, R.id.three, R.id.four, R.id.five, R.id.six, R.id.seven, R.id.eight };
 
     /**
      * Subset of BUTTON_IDS, to differentiate small/side buttons
      * since they can be assigned additional functionality.
      */
-    private static final int[] SMALL_BUTTON_IDS = { R.id.one, R.id.six };
+    private static final int[] SMALL_BUTTON_IDS = { R.id.one, R.id.eight };
 
     // holds the button views in the order they currently appear on screen
     private final ArrayList<KeyButtonView> mButtonViews;
@@ -116,6 +116,14 @@ public class NavbarEditor implements View.OnTouchListener {
             R.string.navbar_power_button, R.string.accessibility_menu,
             KeyEvent.KEYCODE_POWER, R.drawable.ic_sysbar_power,
             R.drawable.ic_sysbar_power_land, R.drawable.ic_sysbar_power_side);
+    public static final ButtonInfo NAVBAR_VLUP = new ButtonInfo("vlup",
+            R.string.navbar_vlup_button, R.string.accessibility_menu,
+            KeyEvent.KEYCODE_VOLUME_UP, R.drawable.ic_sysbar_plus,
+            R.drawable.ic_sysbar_plus_land, R.drawable.ic_sysbar_plus_side);
+    public static final ButtonInfo NAVBAR_VLDN = new ButtonInfo("vldn",
+            R.string.navbar_vldn_button, R.string.accessibility_menu,
+            KeyEvent.KEYCODE_VOLUME_DOWN, R.drawable.ic_sysbar_minus,
+            R.drawable.ic_sysbar_minus_land, R.drawable.ic_sysbar_minus_side);
     public static final ButtonInfo NAVBAR_SEARCH = new ButtonInfo("search",
             R.string.navbar_search_button, R.string.accessibility_back,
             KeyEvent.KEYCODE_SEARCH, R.drawable.ic_sysbar_search,
@@ -138,11 +146,11 @@ public class NavbarEditor implements View.OnTouchListener {
             R.drawable.ic_sysbar_menu_big_land, 0);
 
     private static final ButtonInfo[] ALL_BUTTONS = new ButtonInfo[] {
-        NAVBAR_EMPTY, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_POWER, NAVBAR_SEARCH,
+        NAVBAR_EMPTY, NAVBAR_VLUP, NAVBAR_VLDN, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_POWER, NAVBAR_SEARCH,
         NAVBAR_RECENT, NAVBAR_CONDITIONAL_MENU, NAVBAR_ALWAYS_MENU, NAVBAR_MENU_BIG
     };
 
-    private static final String DEFAULT_SETTING_STRING = "empty|back|home|recent|power|menu0";
+    private static final String DEFAULT_SETTING_STRING = "empty|vldn|vlup|back|home|recent|power|menu0";
 
     public NavbarEditor (View parent, boolean orientation) {
         mContext = parent.getContext();

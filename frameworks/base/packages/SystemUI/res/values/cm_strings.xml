@@ -94,6 +94,8 @@
     <string name="navbar_home_button">Home button</string>
     <string name="navbar_recent_button">Recent button</string>
     <string name="navbar_power_button">Power button</string>
+    <string name="navbar_vlup_button">Volume Up button</string>
+    <string name="navbar_vldn_button">Volume Down button</string>
     <string name="navbar_search_button">Search button</string>
     <string name="navbar_back_button">Back button</string>
     <string name="navbar_empty_button">Leave empty</string>

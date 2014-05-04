@@ -390,7 +390,7 @@ public class NavigationBarView extends LinearLayout {
         if (kbv != null) {
             kbv.updateResources();
         }
-        kbv = (KeyButtonView) findViewById(R.id.six);
+        kbv = (KeyButtonView) findViewById(R.id.eight);
         if (kbv != null) {
             kbv.updateResources();
         }
