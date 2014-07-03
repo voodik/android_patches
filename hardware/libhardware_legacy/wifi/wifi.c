@@ -295,7 +295,8 @@ int wifi_load_driver()
 	     if (vid_fd > 0) {
 		 read(vid_fd, buf, 4);
 		 ALOGE("node = %s, vid = %s", node, buf);
-		 if (strcmp(buf, "0bda") == 0 || strcmp(buf, "7392") == 0) {
+				if (strcmp(buf, "0bda") == 0 || 
+                        strcmp(buf, "148f") == 0 || strcmp(buf, "7392") == 0) {
 		     sprintf(node, "/sys/bus/usb/devices/%s/idProduct", dent->d_name);
 		     int pid_fd = open(node, O_RDONLY);
 		     read(pid_fd, buf, 4);
