@@ -48,7 +48,6 @@
 #include <sys/_system_properties.h>
 #endif
 
-#define WIFIUSB_NODE	"/sys/bus/usb/devices/1-3."
 static struct wpa_ctrl *ctrl_conn;
 static struct wpa_ctrl *monitor_conn;
 
@@ -144,7 +143,6 @@ static unsigned char dummy_key[21] = { 0x02, 0x11, 0xbe, 0x33, 0x43, 0x35,
                                        0x1c, 0xd3, 0xee, 0xff, 0xf1, 0xe2,
                                        0xf3, 0xf4, 0xf5 };
 
-int wifi_set_module_status	(char *ctl_fp, unsigned char status);
 /* Is either SUPPLICANT_NAME or P2P_SUPPLICANT_NAME */
 static char supplicant_name[PROPERTY_VALUE_MAX];
 /* Is either SUPP_PROP_NAME or P2P_PROP_NAME */
@@ -377,7 +375,7 @@ int wifi_load_driver()
         if (property_get(DRIVER_PROP_NAME, driver_status, NULL)) {
             if (strcmp(driver_status, "ok") == 0)
                 return 0;
-            else if (strcmp(DRIVER_PROP_NAME, "failed") == 0) {
+            else if (strcmp(driver_status, "failed") == 0) {
                 wifi_unload_driver();
                 return -1;
             }
